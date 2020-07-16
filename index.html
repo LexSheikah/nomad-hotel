@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nomad Hotel</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <div id="brand">Nomad Hotel</div>
+      <ul id="menu">
+        <li><a href="#" class="menu-items">Habitaciones</a></li>
+        <li><a href="#" class="menu-items">Paquetes</a></li>
+        <li><a href="#" class="menu-items">Contáctanos</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="search-options">
+      <label class="lbl-options">Seleccione una habitación:</label>
+      <select id="lista-habitaciones">
+        <option value="todo">Todas las habitaciones</option>
+        <!-- Opciones renderizadas -->
+      </select>
+      <label class="lbl-options">Número de noches: </label>
+      <div id="spinner-number">
+        <button id="spinner-minus" class="btn-primary">- </button>
+        <input id="spinner-input" type="text" disabled/>
+        <button id="spinner-plus" class="btn-primary">+ </button>
+      </div>
+    </section>
+
+      <section id="habitaciones">
+        <!-- Habitaciones renderizadas -->
+      </section>
+  </main>
+
+  <footer>
+    <h3>Kodigo &copy; Lex Sheikah</h3>
+  </footer>
+
+  <script src="./js/script.js"></script>
+</body>
+</html>
