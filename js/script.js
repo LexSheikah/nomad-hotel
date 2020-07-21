@@ -1,4 +1,5 @@
 const habitacionesSection = document.querySelector('#habitaciones'),
+      divSpinner = document.querySelector('#spinner-number'),
       btnMas = document.querySelector('#spinner-plus'),
       btnMenos = document.querySelector('#spinner-minus'),
       txtNoches = document.querySelector('#spinner-input'),
@@ -74,6 +75,15 @@ const renderHabitacion = (id) => {
       habitacionesSection.insertAdjacentHTML('beforeend', habitacion)
     }
   })
+
+  agregarModal()
+
+  // Habilitando el Spinner de Número de noches
+  if(id === 'todo'){
+    if(!divSpinner.classList.contains('hidden')) divSpinner.classList.add('hidden')
+  } else {
+    if(divSpinner.classList.contains('hidden')) divSpinner.classList.remove('hidden')
+  }
 }
 
 const renderOpciones = () => {
@@ -117,53 +127,90 @@ const mostrarModal = ( id ) => {
   const modalBackground = document.createElement('div')
   modalBackground.id = 'modalBackground'
 
-const modalBox =
-  `<section id="modal">
-    <article id="modalBox">
-      <div id="box-resumen">
-        <img src="${hab.image}" class="box-img" alt="${hab.nombre}"/>
-        <h2>$${hab.precio * cantidadNoches}</h2>
-        <h4>Habitación ${hab.nombre} por ${cantidadNoches} noche(s)</h2>
-      </div>
-      <form id="box-form">
-        <button id="btn-cerrar"><i class="fas fa-times"></i></button>
-        <label id="form-title">Información de la reservación</label>
-        <div>
-          <label class="icono"><i class="fas fa-user"></i></label>
-          <input type="text" id="txt-nombre" class="campo" placeholder="NOMBRE">
-          <label class="icono"><i class="fas fa-user"></i></label>
-          <input type="text" id="txt-apellido" class="campo" placeholder="APELLIDO">
+  const modalBox =
+    `<section id="modal">
+      <article id="modalBox">
+        <div id="box-resumen">
+          <img src="${hab.image}" class="box-img" alt="${hab.nombre}"/>
+          <h2>$${hab.precio * cantidadNoches}</h2>
+          <h4>Habitación ${hab.nombre} por ${cantidadNoches} noche(s)</h2>
         </div>
-        <div>
-          <label class="icono"><i class="fas fa-envelope"></i></label>
-          <input type="email" id="txt-email" class="campo" placeholder="EMAIL">
-          <label class="icono"><i class="fas fa-phone-alt"></i></label>
-          <input type="text" id="txt-tel" class="campo" placeholder="TELEFONO">
-        </div>
-        <div>
-          <label class="icono"><i class="far fa-calendar"></i></label>
-          <input type="date" id="fecha-inicio" class="campo">
-          <label class="icono"><i class="far fa-calendar-check"></i></label>
-          <input type="date" id="fecha-fin" class="campo">
-        </div>
-        <div>
-          <label class="icono"><i class="fas fa-user-plus"></i></label>
-          <input type="number" id="txt-personas" class="campo" placeholder="CANTIDAD DE PERSONAS" min="1" max="5">
-        </div>
-        <button id="btn-confirmar" class="btn-primary">Aceptar</button>
-      </form>
-    </article>
-  </section>`
+        <form id="box-form">
+          <button id="btn-cerrar"><i class="fas fa-times"></i></button>
+          <label id="form-title">Información de la reservación</label>
+          <div>
+            <label class="icono"><i class="fas fa-user"></i></label>
+            <input type="text" id="txt-nombre" class="campo" placeholder="NOMBRE">
+            <label class="icono"><i class="fas fa-user"></i></label>
+            <input type="text" id="txt-apellido" class="campo" placeholder="APELLIDO">
+          </div>
+          <div>
+            <label class="icono"><i class="fas fa-envelope"></i></label>
+            <input type="email" id="txt-email" class="campo" placeholder="EMAIL">
+            <label class="icono"><i class="fas fa-phone-alt"></i></label>
+            <input type="text" id="txt-tel" class="campo" placeholder="TELEFONO">
+          </div>
+          <div>
+            <label class="icono"><i class="far fa-calendar"></i></label>
+            <input type="date" id="fecha-inicio" class="campo">
+            <label class="icono"><i class="far fa-calendar-check"></i></label>
+            <input type="date" id="fecha-fin" class="campo">
+          </div>
+          <div>
+            <label class="icono"><i class="fas fa-user-plus"></i></label>
+            <input type="number" id="txt-personas" class="campo" placeholder="CANTIDAD DE PERSONAS" min="1" max="5">
+          </div>
+          <button id="btn-confirmar" class="btn-primary">Aceptar</button>
+        </form>
+      </article>
+    </section>`
 
   document.body.insertAdjacentHTML('afterbegin', modalBox)
   document.body.insertAdjacentElement('afterbegin', modalBackground)
   document.body.classList.add('stop-scrolling') // Deshabilitar el scroll
+
+  document.querySelector("#btn-cerrar").addEventListener('click', (e) => {
+    e.preventDefault();
+    ocultarModal();
+  })
+
+  // Validar formulario
+  formCampos = document.querySelectorAll('.campo')
+  formCampos.forEach( campo => {
+    campo.oninput = () => activarColor(campo)
+  })
+
+  document.querySelector('#btn-confirmar').addEventListener('click', (e) => {
+    e.preventDefault()
+    let formCompleto = true
+
+    formCampos.forEach( campo => {
+      if(campo.value === "") {
+        activarColor(campo)
+        formCompleto = false
+      }
+    })
+
+    if(formCompleto) {
+      ocultarModal()
+    }
+  })
+
 }
 
-// const ocultarModal = () => {
-//   const modalBackground = document.querySelector('#modalBackground')
-//   document.body.removeChild(modalBackground)
-// }
+const activarColor = (elemento) => {
+  if(elemento.value === "") {
+    elemento.style.setProperty("border-color","#e8505b")
+  } else {
+    elemento.style.setProperty("border-color","transparent")
+  }
+}
+
+const ocultarModal = () => {
+  document.body.removeChild(document.querySelector('#modalBackground'))
+  document.body.removeChild(document.querySelector('#modal'))
+  document.body.classList.remove('stop-scrolling') // Deshabilitar el scroll
+}
 
 const agregarModal = () => {
   btnReserva = document.querySelectorAll('.btn-reservar')
@@ -175,9 +222,6 @@ const agregarModal = () => {
   })
 
 }
-
-
-
 
 //Inicializando ...
 txtNoches.value = cantidadNoches

@@ -78,6 +78,10 @@ main {
   cursor: pointer;
 }
 
+.hidden {
+  display: none !important;
+}
+
 #spinner-number {
   display: flex;
   align-items: center;
