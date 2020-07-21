@@ -209,7 +209,7 @@ const activarColor = (elemento) => {
 const ocultarModal = () => {
   document.body.removeChild(document.querySelector('#modalBackground'))
   document.body.removeChild(document.querySelector('#modal'))
-  document.body.classList.remove('stop-scrolling') // Deshabilitar el scroll
+  document.body.classList.remove('stop-scrolling') // Habilitar el scroll
 }
 
 const agregarModal = () => {
@@ -228,4 +228,3 @@ txtNoches.value = cantidadNoches
 txtNoches.setAttribute('disabled',true)
 renderOpciones()
 renderHabitacion('todo')
-agregarModal()
