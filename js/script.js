@@ -151,7 +151,7 @@ const mostrarModal = ( id ) => {
             <input type="text" id="txt-tel" class="campo" placeholder="TELEFONO">
           </div>
           <div>
-            <label class="icono"><i class="far fa-calendar"></i></label>
+            <label class="icono"><i class="far fa-calendar-check"></i></label>
             <input type="date" id="fecha-inicio" class="campo">
             <label class="icono"><i class="far fa-calendar-check"></i></label>
             <input type="date" id="fecha-fin" class="campo">
@@ -168,6 +168,12 @@ const mostrarModal = ( id ) => {
   document.body.insertAdjacentHTML('afterbegin', modalBox)
   document.body.insertAdjacentElement('afterbegin', modalBackground)
   document.body.classList.add('stop-scrolling') // Deshabilitar el scroll
+
+  // Seteando fechas para la reservación
+  let fecha = new Date();
+  document.querySelector('#fecha-inicio').value = fecha.toISOString().substr(0, 10);
+  fecha.setDate(fecha.getDate() + cantidadNoches);
+  document.querySelector('#fecha-fin').value = fecha.toISOString().substr(0, 10);
 
   document.querySelector("#btn-cerrar").addEventListener('click', (e) => {
     e.preventDefault();
@@ -220,7 +226,6 @@ const agregarModal = () => {
       mostrarModal(btn.value)
     })
   })
-
 }
 
 //Inicializando ...
