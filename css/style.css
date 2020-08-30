@@ -191,8 +191,8 @@ footer {
   box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
 }
 
-#modalBackground {
-  width: 100vw;
+#modal-background {
+  width: 100%;
   height: 100vh;
   background-color: var(--black);
   opacity: 0.7;
@@ -202,10 +202,12 @@ footer {
   z-index: 100;
 }
 
-#modal {
-  width: 100vw;
-  height: 100vh;
+.modal {
+  width: 100%;
+  height: 100%;
   position: absolute;
+  top: 0;
+  left: 0;
   z-index: 150;
   display: flex;
   justify-content: center;
@@ -236,7 +238,7 @@ footer {
   font-size: 42px;
 }
 
-.box-img {
+#box-img {
   width: 100%;
   height: 70%;
   object-fit: cover;

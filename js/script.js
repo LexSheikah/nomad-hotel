@@ -1,37 +1,21 @@
+import Habitacion from './habitacion.js'
+import Huesped from './huesped.js'
+
 const habitacionesSection = document.querySelector('#habitaciones'),
       divSpinner = document.querySelector('#spinner-number'),
       btnMas = document.querySelector('#spinner-plus'),
       btnMenos = document.querySelector('#spinner-minus'),
       txtNoches = document.querySelector('#spinner-input'),
-      slcHabitaciones = document.querySelector('#lista-habitaciones')
+      slcHabitaciones = document.querySelector('#lista-habitaciones'),
+      modalBackground = document.querySelector('#modal-background'),
+      modalReservacion = document.querySelector('#reservaciones')
 
 let cantidadNoches = 1
 
-HABITACIONES = [
-  {
-    id: 'hab1',
-    nombre: 'Normal',
-    precio: 100,
-    disponibles: 10,
-    descripcion: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-    image: 'https://cdn.pixabay.com/photo/2016/08/07/00/44/bed-1575491_960_720.jpg'
-  },
-  {
-    id: 'hab2',
-    nombre: 'Elegante',
-    precio: 230,
-    disponibles: 5,
-    descripcion: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-    image: 'https://cdn.pixabay.com/photo/2014/08/11/21/40/bedroom-416063_960_720.jpg'
-  },
-  {
-    id: 'hab3',
-    nombre: 'Lujosa',
-    precio: 300,
-    disponibles: 2,
-    descripcion: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-    image: 'https://cdn.pixabay.com/photo/2018/10/28/12/37/bedroom-3778695_960_720.jpg'
-  }
+const HABITACIONES = [
+  new Habitacion('hab1', 'Normal', 100, 10, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2016/08/07/00/44/bed-1575491_960_720.jpg'),
+  new Habitacion('hab2', 'Elegante', 230, 5, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2014/08/11/21/40/bedroom-416063_960_720.jpg'),
+  new Habitacion('hab3', 'Lujosa', 300, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2018/10/28/12/37/bedroom-3778695_960_720.jpg')
 ]
 
 const habitacionOptionTemplate = ( hab ) => {
@@ -122,69 +106,24 @@ const buscarHabitacion = ( id ) => {
 
 // Manejo del modal para reservar habitación
 const mostrarModal = ( id ) => {
-  const hab = buscarHabitacion(id);
+  let fecha = new Date();
+  const hab = buscarHabitacion(id)
 
-  const modalBackground = document.createElement('div')
-  modalBackground.id = 'modalBackground'
-
-  const modalBox =
-    `<section id="modal">
-      <article id="modalBox">
-        <div id="box-resumen">
-          <img src="${hab.image}" class="box-img" alt="${hab.nombre}"/>
-          <h2>$${hab.precio * cantidadNoches}</h2>
-          <h4>Habitación ${hab.nombre} por ${cantidadNoches} noche(s)</h2>
-        </div>
-        <form id="box-form">
-          <button id="btn-cerrar"><i class="fas fa-times"></i></button>
-          <label id="form-title">Información de la reservación</label>
-          <div>
-            <label class="icono"><i class="fas fa-user"></i></label>
-            <input type="text" id="txt-nombre" class="campo" placeholder="NOMBRE">
-            <label class="icono"><i class="fas fa-user"></i></label>
-            <input type="text" id="txt-apellido" class="campo" placeholder="APELLIDO">
-          </div>
-          <div>
-            <label class="icono"><i class="fas fa-envelope"></i></label>
-            <input type="email" id="txt-email" class="campo" placeholder="EMAIL">
-            <label class="icono"><i class="fas fa-phone-alt"></i></label>
-            <input type="text" id="txt-tel" class="campo" placeholder="TELEFONO">
-          </div>
-          <div>
-            <label class="icono"><i class="far fa-calendar-check"></i></label>
-            <input type="date" id="fecha-inicio" class="campo">
-            <label class="icono"><i class="far fa-calendar-check"></i></label>
-            <input type="date" id="fecha-fin" class="campo">
-          </div>
-          <div>
-            <label class="icono"><i class="fas fa-user-plus"></i></label>
-            <input type="number" id="txt-personas" class="campo" placeholder="CANTIDAD DE PERSONAS" min="1" max="5">
-          </div>
-          <button id="btn-confirmar" class="btn-primary">Aceptar</button>
-        </form>
-      </article>
-    </section>`
-
-  document.body.insertAdjacentHTML('afterbegin', modalBox)
-  document.body.insertAdjacentElement('afterbegin', modalBackground)
-  document.body.classList.add('stop-scrolling') // Deshabilitar el scroll
+  document.querySelector('#box-img').setAttribute('src', hab.image)
+  document.querySelector('#box-precio').innerText = `$${hab.precio * cantidadNoches}`
+  document.querySelector('#box-nombre').innerText = `Habitación  ${hab.nombre} por ${cantidadNoches} noche(s)`
+  modalBackground.classList.remove('hidden')
+  modalReservacion.classList.remove('hidden')
+  // document.body.classList.add('stop-scrolling') // Deshabilitar el scroll
 
   // Seteando fechas para la reservación
-  let fecha = new Date();
   document.querySelector('#fecha-inicio').value = fecha.toISOString().substr(0, 10);
   fecha.setDate(fecha.getDate() + cantidadNoches);
   document.querySelector('#fecha-fin').value = fecha.toISOString().substr(0, 10);
 
-  document.querySelector("#btn-cerrar").addEventListener('click', (e) => {
-    e.preventDefault();
-    ocultarModal();
-  })
-
   // Validar formulario
-  formCampos = document.querySelectorAll('.campo')
-  formCampos.forEach( campo => {
-    campo.oninput = () => activarColor(campo)
-  })
+  let formCampos = document.querySelectorAll('.campo')
+  formCampos.forEach( campo => campo.oninput = () => activarColor(campo))
 
   document.querySelector('#btn-confirmar').addEventListener('click', (e) => {
     e.preventDefault()
@@ -212,16 +151,21 @@ const activarColor = (elemento) => {
   }
 }
 
+document.querySelector("#btn-cerrar").addEventListener('click', (e) => {
+  e.preventDefault();
+  ocultarModal();
+})
+
 const ocultarModal = () => {
-  document.body.removeChild(document.querySelector('#modalBackground'))
-  document.body.removeChild(document.querySelector('#modal'))
+  modalBackground.classList.add('hidden')
+  modalReservacion.classList.add('hidden')
   document.body.classList.remove('stop-scrolling') // Habilitar el scroll
 }
 
 const agregarModal = () => {
-  btnReserva = document.querySelectorAll('.btn-reservar')
+  const btnReservar = document.querySelectorAll('.btn-reservar')
 
-  btnReserva.forEach( btn => {
+  btnReservar.forEach( btn => {
     btn.addEventListener('click', () => {
       mostrarModal(btn.value)
     })
