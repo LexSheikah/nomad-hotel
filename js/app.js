@@ -154,8 +154,6 @@ const searchPerson = ( dui ) => {
 
 // Manejo del modal para reservar habitación
 const showModal = ( id ) => {
-  const dateStart = document.querySelector('#fecha-inicio')
-  const dateEnd = document.querySelector('#fecha-fin')
   let date = new Date();
   hab = searchRoom(id)
 
@@ -230,7 +228,7 @@ document.querySelector("#btn-close").addEventListener('click', (e) => {
   hideModal();
 })
 
-document.querySelector('#btn-confirmar').addEventListener('click', (e) => {
+document.querySelector('#btn-confirm').addEventListener('click', (e) => {
   e.preventDefault()
   let formComplete = true
 
