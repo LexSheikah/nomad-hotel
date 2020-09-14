@@ -1,274 +1,272 @@
-import Habitacion from './habitacion.js'
-import Reservacion from './reservacion.js'
-import Persona from './persona.js'
+import Room from './room.js'
+import Reservation from './reservation.js'
+import Person from './person.js'
 
-const habitacionesSection = document.querySelector('#habitaciones'),
-      reservacionesSection = document.querySelector('#reservaciones'),
+const roomsSection = document.querySelector('#rooms'),
+      reservationsSection = document.querySelector('#reservations'),
       divSpinner = document.querySelector('#spinner-number'),
-      btnMas = document.querySelector('#spinner-plus'),
-      btnMenos = document.querySelector('#spinner-minus'),
-      txtNoches = document.querySelector('#spinner-input'),
-      slcHabitaciones = document.querySelector('#lista-habitaciones'),
+      btnPlus = document.querySelector('#spinner-plus'),
+      btnMinus = document.querySelector('#spinner-minus'),
+      txtNights = document.querySelector('#spinner-input'),
+      slcRooms = document.querySelector('#room-list'),
       modalBackground = document.querySelector('#modal-background'),
-      modalReservacion = document.querySelector('#modal-reservaciones'),
+      modalReservation = document.querySelector('#modal-reservations'),
       btnHome = document.querySelector('#btn-home'),
-      btnReservaciones = document.querySelector('#btn-reservaciones'),
-      seccionInicio = document.querySelector('#seccion-inicio'),
-      seccionReservaciones = document.querySelector('#seccion-reservaciones')
+      btnReservations = document.querySelector('#btn-reservations'),
+      sectionHome = document.querySelector('#section-home'),
+      sectionReservations = document.querySelector('#section-reservations')
 
 // Elementos del formulario para reservación
-const txtNombre = document.querySelector('#txt-nombre'),
-      txtApellido = document.querySelector('#txt-apellido'),
+const txtName = document.querySelector('#txt-name'),
+      txtLastName = document.querySelector('#txt-lastname'),
       txtDui = document.querySelector('#txt-dui'),
       txtEmail = document.querySelector('#txt-email'),
-      txtTel = document.querySelector('#txt-tel'),
-      txtCantidadPersonas = document.querySelector('#txt-personas'),
-      fechaInicio = document.querySelector('#fecha-inicio'),
-      fechaFin = document.querySelector('#fecha-fin')
+      txtPhone = document.querySelector('#txt-phone'),
+      txtPeople = document.querySelector('#txt-people'),
+      dateStart = document.querySelector('#date-start'),
+      dateEnd = document.querySelector('#date-end')
 
-let cantidadNoches = 1,
-    RESERVACIONES = [],
-    PERSONAS = [],
+let nights = 1,
+    RESERVATIONS = [],
+    PEOPLE = [],
     hab = null
 
 //#region DATOS DE PRUEBA
-const person1 = new Persona('12345678-9','Lex Marvin','Ortiz Canizález','lex.ortizc@gmail.com','7477-4734')
-const reserva1 = new Reservacion('r01',3,'2020-08-30','2020-09-01','12345678-9','hab3')
-// PERSONAS.push(person1)
-// RESERVACIONES.push(reserva1)
-// RESERVACIONES.push(reserva1)
+const person1 = new Person('12345678-9','Lex Marvin','Ortiz Canizález','lex.ortizc@gmail.com','7477-4734')
+const reservation1 = new Reservation('r01',3,'2020-08-30','2020-09-01','12345678-9','hab3')
+// PEOPLE.push(person1)
+// RESERVATIONS.push(reserva1)
+// RESERVATIONS.push(reserva1)
 //#endregion
 
-const HABITACIONES = [
-  new Habitacion('hab1', 'Normal', 100, 10, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2016/08/07/00/44/bed-1575491_960_720.jpg'),
-  new Habitacion('hab2', 'Elegante', 230, 5, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2014/08/11/21/40/bedroom-416063_960_720.jpg'),
-  new Habitacion('hab3', 'Lujosa', 300, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2018/10/28/12/37/bedroom-3778695_960_720.jpg')
+const ROOMS = [
+  new Room('hab1', 'Normal', 100, 10, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2016/08/07/00/44/bed-1575491_960_720.jpg'),
+  new Room('hab2', 'Elegante', 230, 5, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2014/08/11/21/40/bedroom-416063_960_720.jpg'),
+  new Room('hab3', 'Lujosa', 300, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2018/10/28/12/37/bedroom-3778695_960_720.jpg')
 ]
 
-const habitacionOptionTemplate = ( hab ) => {
+const roomOptionTemplate = ( hab ) => {
   const selectItem = document.createElement('option')
   selectItem.setAttribute('value', hab.id)
-  selectItem.insertAdjacentText('beforeend', hab.nombre)
-  slcHabitaciones.insertAdjacentElement('beforeend', selectItem)
+  selectItem.insertAdjacentText('beforeend', hab.name)
+  slcRooms.insertAdjacentElement('beforeend', selectItem)
 }
 
-const habitacionArticleTemplate = ( hab ) => {
+const roomArticleTemplate = ( hab ) => {
   return  `<article class="card">
-            <img src="${hab.image}" class="card-img" alt="${hab.nombre}">
+            <img src="${hab.image}" class="card-img" alt="${hab.name}">
             <div class="card-text">
               <div class="card-text-header">
-                <h2>${hab.nombre}</h2>
-                <h3>$${hab.precio} la noche</h3>
-                <h3>${hab.disponibles} habitaciones disponibles</h3>
+                <h2>${hab.name}</h2>
+                <h3>$${hab.price} por noche</h3>
+                <h3>${hab.available} habitaciones disponibles</h3>
               </div>
-              <p class="card-text-body">${hab.descripcion}</p>
+              <p class="card-text-body">${hab.description}</p>
             </div>
             <div class="card-price">
-              <h2>$${hab.precio * cantidadNoches}</h2>
-              <h5>por ${cantidadNoches} noche(s)</h5>
-              <button class="btn-reservar btn-primary" value="${hab.id}"> Reservar </button>
+              <h2>$${hab.price * nights}</h2>
+              <h5>por ${nights} noche(s)</h5>
+              <button class="btn-reserve btn-primary" value="${hab.id}"> Reservar </button>
             </div>
           </article>`
 }
 
-const reservacionArticleTemplate = ( reserva, persona, habitacion) => {
+const reservationArticleTemplate = ( reserva, persona, habitacion) => {
   return  `<article class="card-reservation card">
-            <label><span class="active">Nombre responsable: </span> ${persona.nombre} ${persona.apellido}</label>
+            <label><span class="active">Nombre responsable: </span> ${persona.name} ${persona.lastName}</label>
             <label><span class="active">DUI: </span> ${persona.dui}</label>
             <label><span class="active">Email: </span> ${persona.email}</label>
-            <label><span class="active">Teléfono: </span> ${persona.telefono}</label>
-            <label><span class="active">Habitacion: </span> ${habitacion.nombre}</label>
-            <label><span class="active">Cantidad de personas: </span> ${reserva.cantidadPersonas}</label>
-            <label><span class="active">Fecha inicial: </span> ${reserva.fechaInicio}</label>
-            <label><span class="active">Fecha final: </span> ${reserva.fechaFin}</label>
+            <label><span class="active">Teléfono: </span> ${persona.phone}</label>
+            <label><span class="active">Habitacion: </span> ${habitacion.name}</label>
+            <label><span class="active">Cantidad de personas: </span> ${reserva.people}</label>
+            <label><span class="active">Fecha inicial: </span> ${reserva.dateStart}</label>
+            <label><span class="active">Fecha final: </span> ${reserva.dateEnd}</label>
           </article>`
 }
 
-const renderHabitacion = (id) => {
-  habitacionesSection.innerHTML = ''
-  HABITACIONES.forEach( hab => {
-    if( hab.id === id || id === 'todo') {
-      const habitacion = habitacionArticleTemplate(hab)
-      habitacionesSection.insertAdjacentHTML('beforeend', habitacion)
+const renderRoom = (id) => {
+  roomsSection.innerHTML = ''
+  ROOMS.forEach( r => {
+    if( r.id === id || id === 'all') {
+      const room = roomArticleTemplate(r)
+      roomsSection.insertAdjacentHTML('beforeend', room)
     }
   })
 
-  agregarModal()
+  addModal()
 
   // Habilitando el Spinner de Número de noches
-  if(id === 'todo'){
+  if(id === 'all'){
     if(!divSpinner.classList.contains('hidden')) divSpinner.classList.add('hidden')
   } else {
     if(divSpinner.classList.contains('hidden')) divSpinner.classList.remove('hidden')
   }
 }
 
-const renderReservaciones = () => {
-  reservacionesSection.innerHTML = ''
-  RESERVACIONES.forEach( reserva => {
-    const r = reservacionArticleTemplate(reserva, buscarPersona(reserva.dui), buscarHabitacion(reserva.idHabitacion))
-    reservacionesSection.insertAdjacentHTML('beforeend', r)
+const renderRooms = () => {
+  reservationsSection.innerHTML = ''
+  RESERVATIONS.forEach( r => {
+    const reservation = reservationArticleTemplate(r, searchPerson(r.dui), searchRoom(r.idRoom))
+    reservationsSection.insertAdjacentHTML('beforeend', reservation)
   })
 
-  if(RESERVACIONES.length == 0) reservacionesSection.insertAdjacentHTML('beforeend', '<h4 id="not-found">Aún no existen reservaciones</h4>')
+  if(RESERVATIONS.length == 0) reservationsSection.insertAdjacentHTML('beforeend', '<h4 id="not-found">Aún no existen reservaciones</h4>')
 
 }
-const renderOpciones = () => {
-  HABITACIONES.forEach( hab => {
-    habitacionOptionTemplate( hab )
+const renderOptions = () => {
+  ROOMS.forEach( hab => {
+    roomOptionTemplate( hab )
   })
 }
 
-slcHabitaciones.addEventListener('change', () => {
-  const id = slcHabitaciones.options[slcHabitaciones.selectedIndex].value
-  renderHabitacion(id)
+slcRooms.addEventListener('change', () => {
+  const id = slcRooms.options[slcRooms.selectedIndex].value
+  renderRoom(id)
 })
 
 // Método para aumentar o decrementar el número de noches y renderizar los cambios
-const actualizarNoches = (n) => {
-  const id = slcHabitaciones.options[slcHabitaciones.selectedIndex].value
-  cantidadNoches = cantidadNoches + n
-  txtNoches.value = cantidadNoches
-  renderHabitacion(id)
+const updateNights = (n) => {
+  const id = slcRooms.options[slcRooms.selectedIndex].value
+  nights = nights + n
+  txtNights.value = nights
+  renderRoom(id)
 }
 
-btnMas.addEventListener('click', () => {
-  actualizarNoches(1)
+btnPlus.addEventListener('click', () => {
+  updateNights(1)
 })
 
-btnMenos.addEventListener('click', () => {
-  if( cantidadNoches > 1 ) {
-    actualizarNoches(-1)
+btnMinus.addEventListener('click', () => {
+  if( nights > 1 ) {
+    updateNights(-1)
   }
 })
 
-const buscarHabitacion = ( id ) => {
-  let habitacion = HABITACIONES.filter( hab => hab.id === id)
-  return habitacion[0]
+const searchRoom = ( id ) => {
+  let room = ROOMS.filter( r => r.id === id)
+  return room[0]
 }
 
-const buscarPersona = ( dui ) => {
-  let persona = PERSONAS.filter( p => p.dui === dui)
-  return persona[0]
+const searchPerson = ( dui ) => {
+  let person = PEOPLE.filter( p => p.dui === dui)
+  return person[0]
 }
 
 // Manejo del modal para reservar habitación
-const mostrarModal = ( id ) => {
-  const fechaInicio = document.querySelector('#fecha-inicio')
-  const fechaFin = document.querySelector('#fecha-fin')
-  let fecha = new Date();
-  hab = buscarHabitacion(id)
+const showModal = ( id ) => {
+  const dateStart = document.querySelector('#fecha-inicio')
+  const dateEnd = document.querySelector('#fecha-fin')
+  let date = new Date();
+  hab = searchRoom(id)
 
   document.querySelector('#box-img').setAttribute('src', hab.image)
-  document.querySelector('#box-price').innerText = `$${hab.precio * cantidadNoches}`
-  document.querySelector('#box-name').innerText = `Habitación  ${hab.nombre} por ${cantidadNoches} noche(s)`
+  document.querySelector('#box-price').innerText = `$${hab.price * nights}`
+  document.querySelector('#box-name').innerText = `Habitación  ${hab.name} por ${nights} noche(s)`
   modalBackground.classList.remove('hidden')
-  modalReservacion.classList.remove('hidden')
-  // document.body.classList.add('stop-scrolling') // Deshabilitar el scroll
+  modalReservation.classList.remove('hidden')
 
   // Seteando fechas para la reservación
-  fechaInicio.value = fecha.toISOString().substr(0, 10);
-  fecha.setDate(fecha.getDate() + cantidadNoches);
-  fechaFin.value = fecha.toISOString().substr(0, 10);
+  dateStart.value = date.toISOString().substr(0, 10);
+  date.setDate(date.getDate() + nights);
+  dateEnd.value = date.toISOString().substr(0, 10);
 }
 
 // Validar formulario
-let formCampos = document.querySelectorAll('.campo')
-formCampos.forEach( campo => campo.oninput = () => activarColor(campo))
+let formFields = document.querySelectorAll('.field')
+formFields.forEach( campo => campo.oninput = () => activeColor(campo))
 
-const validarFechaRecervacion = () => {
-  let fInicio = new Date(fechaInicio.value),
-      fFin = new Date(fechaFin.value)
+const validateReservationDate = () => {
+  let dStart = new Date(dateStart.value),
+      dEnd = new Date(dateEnd.value)
 
-      fInicio.setDate(fInicio.getDate() + 1)
-      fFin.setDate(fFin.getDate() + 1)
+      dStart.setDate(dStart.getDate() + 1)
+      dEnd.setDate(dEnd.getDate() + 1)
 
-  if(Date.now() <= fInicio && fFin > fInicio) {
-    cantidadNoches = (fFin.getTime() - fInicio.getTime()) / 86400000
+  if(Date.now() <= dStart && dEnd > dStart) {
+    nights = (dEnd.getTime() - dStart.getTime()) / 86400000
     document.querySelector('#box-img').setAttribute('src', hab.image)
-    document.querySelector('#box-price').innerText = `$${hab.precio * cantidadNoches}`
-    document.querySelector('#box-name').innerText = `Habitación  ${hab.nombre} por ${cantidadNoches} noche(s)`
-    fechaInicio.style.setProperty("border-color","transparent")
-    fechaFin.style.setProperty("border-color","transparent")
+    document.querySelector('#box-price').innerText = `$${hab.price * nights}`
+    document.querySelector('#box-name').innerText = `Habitación  ${hab.name} por ${nights} noche(s)`
+    dateStart.style.setProperty("border-color","transparent")
+    dateEnd.style.setProperty("border-color","transparent")
 
     return true
   } else {
     document.querySelector('#box-price').innerText = 'Fecha invalida'
     document.querySelector('#box-name').innerText = `Verifique la fecha de reservación`
-    fechaInicio.style.setProperty("border-color","#e8505b")
-    fechaFin.style.setProperty("border-color","#e8505b")
+    dateStart.style.setProperty("border-color","#e8505b")
+    dateEnd.style.setProperty("border-color","#e8505b")
 
     return false
   }
 }
 
-const limpiarFormulario = () => {
-  let fecha = new Date()
+const cleanForm = () => {
+  let date = new Date()
 
   txtDui.value = ''
-  txtNombre.value = ''
-  txtApellido.value = ''
+  txtName.value = ''
+  txtLastName.value = ''
   txtEmail.value = ''
-  txtTel.value = ''
-  txtCantidadPersonas.value = 0
-  fechaInicio.value = fecha
-  fechaFin.value = fecha.setDate(fecha.getDate() + cantidadNoches)
+  txtPhone.value = ''
+  txtPeople.value = 0
+  dateStart.value = date
+  dateEnd.value = date.setDate(date.getDate() + nights)
 }
 
-const activarColor = (elemento) => {
-  if(elemento.value === "") {
-    elemento.style.setProperty("border-color","#e8505b")
+const activeColor = (element) => {
+  if(element.value === "") {
+    element.style.setProperty("border-color","#e8505b")
   } else {
-    elemento.style.setProperty("border-color","transparent")
+    element.style.setProperty("border-color","transparent")
   }
 }
 
-fechaInicio.addEventListener('change', validarFechaRecervacion)
-fechaFin.addEventListener('change', validarFechaRecervacion)
+dateStart.addEventListener('change', validateReservationDate)
+dateEnd.addEventListener('change', validateReservationDate)
 
-document.querySelector("#btn-cerrar").addEventListener('click', (e) => {
+document.querySelector("#btn-close").addEventListener('click', (e) => {
   e.preventDefault();
-  ocultarModal();
+  hideModal();
 })
 
 document.querySelector('#btn-confirmar').addEventListener('click', (e) => {
   e.preventDefault()
-  let formCompleto = true
+  let formComplete = true
 
-  formCampos.forEach( campo => {
+  formFields.forEach( campo => {
     if(campo.value === "") {
-      activarColor(campo)
-      formCompleto = false
+      activeColor(campo)
+      formComplete = false
     }
   })
 
-  if(formCompleto && validarFechaRecervacion()) {
-    hacerReservacion()
-    ocultarModal()
+  if(formComplete && validateReservationDate()) {
+    makeReservation()
+    hideModal()
   }
 })
 
-const hacerReservacion = () => {
-  const p = new Persona(txtDui.value, txtNombre.value, txtApellido.value, txtEmail.value, txtTel.value)
-  const r = new Reservacion(txtDui.value + fechaInicio.value, txtCantidadPersonas.value, fechaInicio.value, fechaFin.value, txtDui.value, hab.id)
-  PERSONAS.push(p)
-  RESERVACIONES.push(r)
-  limpiarFormulario()
+const makeReservation = () => {
+  const p = new Person(txtDui.value, txtName.value, txtLastName.value, txtEmail.value, txtPhone.value)
+  const r = new Reservation(txtDui.value + dateStart.value, txtPeople.value, dateStart.value, dateEnd.value, txtDui.value, hab.id)
+  PEOPLE.push(p)
+  RESERVATIONS.push(r)
+  cleanForm()
 }
 
-const ocultarModal = () => {
+const hideModal = () => {
   modalBackground.classList.add('hidden')
-  modalReservacion.classList.add('hidden')
-  document.body.classList.remove('stop-scrolling') // Habilitar el scroll
-  limpiarFormulario()
+  modalReservation.classList.add('hidden')
+  cleanForm()
 }
 
-const agregarModal = () => {
-  const btnReservar = document.querySelectorAll('.btn-reservar')
+const addModal = () => {
+  const btnReserve = document.querySelectorAll('.btn-reserve')
 
-  btnReservar.forEach( btn => {
+  btnReserve.forEach( btn => {
     btn.addEventListener('click', () => {
-      mostrarModal(btn.value)
+      showModal(btn.value)
     })
   })
 }
@@ -276,23 +274,23 @@ const agregarModal = () => {
 // Manejando la barra de navegación
 btnHome.addEventListener('click', () => {
   btnHome.classList.add('active')
-  btnReservaciones.classList.remove('active')
-  seccionInicio.classList.remove('hidden')
-  seccionReservaciones.classList.add('hidden')
+  btnReservations.classList.remove('active')
+  sectionHome.classList.remove('hidden')
+  sectionReservations.classList.add('hidden')
 
 })
 
-btnReservaciones.addEventListener('click', () => {
-  btnReservaciones.classList.add('active')
+btnReservations.addEventListener('click', () => {
+  btnReservations.classList.add('active')
   btnHome.classList.remove('active')
-  seccionReservaciones.classList.remove('hidden')
-  seccionInicio.classList.add('hidden')
+  sectionReservations.classList.remove('hidden')
+  sectionHome.classList.add('hidden')
 
-  renderReservaciones()
+  renderRooms()
 })
 
 //Inicializando ...
-txtNoches.value = cantidadNoches
-txtNoches.setAttribute('disabled',true)
-renderOpciones()
-renderHabitacion('todo')
+txtNights.value = nights
+txtNights.setAttribute('disabled',true)
+renderOptions()
+renderRoom('all')

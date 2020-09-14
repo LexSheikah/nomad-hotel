@@ -69,7 +69,7 @@ main {
   margin: 10px;
 }
 
-#lista-habitaciones {
+#room-list {
   padding: 5px;
   margin-right: 20px;
   color: var(--dark-purple);
@@ -187,7 +187,7 @@ main {
   font-size: 42px;
 }
 
-.btn-reservar {
+.btn-reserve {
   margin: 25px 0;
 }
 
@@ -277,7 +277,7 @@ footer {
   font-weight: bold;
 }
 
-.campo {
+.field {
   margin: 5px;
   padding: 10px;
   width: 250px;
@@ -287,7 +287,7 @@ footer {
   outline: none;
 }
 
-.icono {
+.icon {
   margin-right: -10px;
   padding: 10px;
   border-radius: 5px 0px 0px 5px;
@@ -297,14 +297,14 @@ footer {
   color: var(--white);
 }
 
-#btn-confirmar {
+#btn-confirm {
   width: 580px;
   margin-left: -5px;
   margin-top: auto;
   justify-self: flex-end;
 }
 
-#btn-cerrar {
+#btn-close {
   width: 50px;
   height: 50px;
   font-size: 24px;
@@ -315,17 +315,11 @@ footer {
   align-self: flex-end;
 }
 
-#btn-cerrar:hover {
+#btn-close:hover {
   color: var(--light-purple);
-
 }
 
 #not-found {
   margin: 5px;
   padding: 5px;
-}
-
-.stop-scrolling {
-  height: 100%;
-  overflow: hidden;
 }
