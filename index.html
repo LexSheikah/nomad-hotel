@@ -12,75 +12,89 @@
     <nav>
       <div id="brand">Nomad Hotel</div>
       <ul id="menu">
-        <li><a href="#" class="menu-items">Habitaciones</a></li>
-        <li><a href="#" class="menu-items">Paquetes</a></li>
-        <li><a href="#" class="menu-items">Contáctanos</a></li>
+        <li><a href="#" id="btn-home" class="menu-items">Habitaciones</a></li>
+        <li><a href="#" id="btn-reservaciones" class="menu-items">Reservaciones</a></li>
+        <!-- <li><a href="#" class="menu-items">Contáctanos</a></li> -->
       </ul>
     </nav>
   </header>
 
   <main>
-    <section id="search-options">
-      <label class="lbl-options">Seleccione una habitación:</label>
-      <select id="lista-habitaciones">
-        <option value="todo">Todas las habitaciones</option>
-        <!-- Opciones renderizadas -->
-      </select>
-      <div id="spinner-number">
-        <label class="lbl-options">Número de noches: </label>
-        <button id="spinner-minus" class="btn-primary">- </button>
-        <input id="spinner-input" type="text" disabled/>
-        <button id="spinner-plus" class="btn-primary">+ </button>
+
+    <section id="seccion-inicio">
+      <div id="search-options">
+        <label class="lbl-options">Seleccione una habitación:</label>
+        <select id="lista-habitaciones">
+          <option value="todo">Todas las habitaciones</option>
+          <!-- Opciones renderizadas -->
+        </select>
+        <div id="spinner-number">
+          <label class="lbl-options">Número de noches: </label>
+          <button id="spinner-minus" class="btn-primary">- </button>
+          <input id="spinner-input" type="text" disabled/>
+          <button id="spinner-plus" class="btn-primary">+ </button>
+        </div>
       </div>
-    </section>
 
       <section id="habitaciones">
         <!-- Habitaciones renderizadas -->
       </section>
+    </section>
 
-      <div id="modal-background" class="hidden"></div>
-      <section id="reservaciones" class="modal hidden">
-        <article id="modalBox">
-          <div id="box-resumen">
-            <img id="box-img"/>
-            <h2 id="box-precio">$400</h2>
-            <h4 id="box-nombre">Habitación por x noches</h2>
-          </div>
-          <form id="box-form">
-            <button id="btn-cerrar"><i class="fas fa-times"></i></button>
-            <label id="form-title">Información de la reservación</label>
-            <div>
-              <label class="icono"><i class="fas fa-user"></i></label>
-              <input type="text" id="txt-nombre" class="campo" placeholder="NOMBRE">
-              <label class="icono"><i class="fas fa-user"></i></label>
-              <input type="text" id="txt-apellido" class="campo" placeholder="APELLIDO">
-            </div>
-            <div>
-              <label class="icono"><i class="fas fa-envelope"></i></label>
-              <input type="email" id="txt-email" class="campo" placeholder="EMAIL">
-              <label class="icono"><i class="fas fa-phone-alt"></i></label>
-              <input type="text" id="txt-tel" class="campo" placeholder="TELEFONO">
-            </div>
-            <div>
-              <label class="icono"><i class="far fa-calendar-check"></i></label>
-              <input type="date" id="fecha-inicio" class="campo">
-              <label class="icono"><i class="far fa-calendar-check"></i></label>
-              <input type="date" id="fecha-fin" class="campo">
-            </div>
-            <div>
-              <label class="icono"><i class="fas fa-user-plus"></i></label>
-              <input type="number" id="txt-personas" class="campo" placeholder="CANTIDAD DE PERSONAS" min="1" max="5">
-            </div>
-            <button id="btn-confirmar" class="btn-primary">Aceptar</button>
-          </form>
-        </article>
+    <section id="seccion-reservaciones" class="hidden">
+      <h2 class="active">Reservaciones</h2>
+      <section id="reservaciones">
+        <!-- Reservaciones renderizadas -->
       </section>
+    </section>
+
+    <div id="modal-background" class="hidden"></div>
+    <section id="modal-reservaciones" class="modal hidden">
+      <article id="modalBox">
+        <div id="box-resumen">
+          <img id="box-img"/>
+          <div id="box-ticket">
+            <h2 id="box-price">$400</h2>
+            <h4 id="box-name">Habitación por x noches</h2>
+          </div>
+        </div>
+        <form id="box-form">
+          <button id="btn-cerrar"><i class="fas fa-times"></i></button>
+          <label id="form-title">Información de la reservación</label>
+          <div>
+            <label class="icono"><i class="fas fa-user"></i></label>
+            <input type="text" id="txt-nombre" class="campo" placeholder="NOMBRE">
+            <label class="icono"><i class="fas fa-user"></i></label>
+            <input type="text" id="txt-apellido" class="campo" placeholder="APELLIDO">
+          </div>
+          <div>
+            <label class="icono"><i class="fas fa-address-card"></i></label>
+            <input type="text" id="txt-dui" class="campo" placeholder="DUI">
+            <label class="icono"><i class="fas fa-phone-alt"></i></label>
+            <input type="text" id="txt-tel" class="campo" placeholder="TELEFONO">
+          </div>
+          <div>
+            <label class="icono"><i class="fas fa-envelope"></i></label>
+            <input type="email" id="txt-email" class="campo" placeholder="EMAIL">
+            <label class="icono"><i class="fas fa-user-plus"></i></label>
+            <input type="number" id="txt-personas" class="campo" placeholder="CANTIDAD DE PERSONAS" min="1" max="5">
+          </div>
+          <div>
+            <label class="icono"><i class="far fa-calendar-check"></i></label>
+            <input type="date" id="fecha-inicio" class="campo">
+            <label class="icono"><i class="far fa-calendar-check"></i></label>
+            <input type="date" id="fecha-fin" class="campo">
+          </div>
+          <button id="btn-confirmar" class="btn-primary">Aceptar</button>
+        </form>
+      </article>
+    </section>
   </main>
 
   <footer>
     <h3>Kodigo &copy; Lex Sheikah</h3>
   </footer>
 
-  <script src="./js/script.js" type="module"></script>
+  <script src="./js/app.js" type="module"></script>
 </body>
 </html>
