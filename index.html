@@ -12,7 +12,7 @@
     <nav>
       <div id="brand">Nomad Hotel</div>
       <ul id="menu">
-        <li><a href="#" id="btn-home" class="menu-items">Habitaciones</a></li>
+        <li><a href="#" id="btn-home" class="menu-items active">Habitaciones</a></li>
         <li><a href="#" id="btn-reservations" class="menu-items">Reservaciones</a></li>
       </ul>
     </nav>
@@ -25,7 +25,6 @@
         <label class="lbl-options">Seleccione una habitación:</label>
         <select id="room-list">
           <option value="all">Todas las habitaciones</option>
-          <!-- Opciones renderizadas -->
         </select>
         <div id="spinner-number">
           <label class="lbl-options">Número de noches: </label>
@@ -35,57 +34,55 @@
         </div>
       </div>
 
-      <section id="rooms">
-        <!-- Habitaciones renderizadas -->
-      </section>
+      <section id="rooms"></section>
     </section>
 
     <section id="section-reservations" class="hidden">
       <h2 class="active">Reservaciones</h2>
-      <section id="reservations">
-        <!-- Reservaciones renderizadas -->
-      </section>
+      <section id="reservations"></section>
     </section>
 
-    <div id="modal-background" class="hidden"></div>
-    <section id="modal-reservations" class="modal hidden">
-      <article id="modalBox">
-        <div id="box-resumen">
-          <img id="box-img"/>
-          <div id="box-ticket">
-            <h2 id="box-price">$400</h2>
-            <h4 id="box-name">Habitación por x noches</h2>
+    <!-- modales  -->
+    <section>
+      <article id="modal-reservation" class="modal hidden">
+        <div class="modal-box">
+          <div id="box-summary">
+            <img id="box-img"/>
+            <div id="box-ticket">
+              <h2 id="box-price">$400</h2>
+              <h4 id="box-name">Habitación por x noches</h2>
+            </div>
           </div>
+          <form id="box-form">
+            <button id="btn-close"><i class="fas fa-times"></i></button>
+            <label id="form-title">Información de la reservación</label>
+            <div>
+              <label class="icon"><i class="fas fa-user"></i></label>
+              <input type="text" id="txt-name" class="field" placeholder="NOMBRE">
+              <label class="icon"><i class="fas fa-user"></i></label>
+              <input type="text" id="txt-lastname" class="field" placeholder="APELLIDO">
+            </div>
+            <div>
+              <label class="icon"><i class="fas fa-address-card"></i></label>
+              <input type="text" id="txt-dui" class="field" placeholder="DUI">
+              <label class="icon"><i class="fas fa-phone-alt"></i></label>
+              <input type="text" id="txt-phone" class="field" placeholder="TELEFONO">
+            </div>
+            <div>
+              <label class="icon"><i class="fas fa-envelope"></i></label>
+              <input type="email" id="txt-email" class="field" placeholder="EMAIL">
+              <label class="icon"><i class="fas fa-user-plus"></i></label>
+              <input type="number" id="txt-people" class="field" placeholder="CANTIDAD DE PERSONAS" min="1" max="5">
+            </div>
+            <div>
+              <label class="icon"><i class="far fa-calendar-check"></i></label>
+              <input type="date" id="date-start" class="field">
+              <label class="icon"><i class="far fa-calendar-check"></i></label>
+              <input type="date" id="date-end" class="field">
+            </div>
+            <button id="btn-confirm" class="btn-primary">Aceptar</button>
+          </form>
         </div>
-        <form id="box-form">
-          <button id="btn-close"><i class="fas fa-times"></i></button>
-          <label id="form-title">Información de la reservación</label>
-          <div>
-            <label class="icon"><i class="fas fa-user"></i></label>
-            <input type="text" id="txt-name" class="field" placeholder="NOMBRE">
-            <label class="icon"><i class="fas fa-user"></i></label>
-            <input type="text" id="txt-lastname" class="field" placeholder="APELLIDO">
-          </div>
-          <div>
-            <label class="icon"><i class="fas fa-address-card"></i></label>
-            <input type="text" id="txt-dui" class="field" placeholder="DUI">
-            <label class="icon"><i class="fas fa-phone-alt"></i></label>
-            <input type="text" id="txt-phone" class="field" placeholder="TELEFONO">
-          </div>
-          <div>
-            <label class="icon"><i class="fas fa-envelope"></i></label>
-            <input type="email" id="txt-email" class="field" placeholder="EMAIL">
-            <label class="icon"><i class="fas fa-user-plus"></i></label>
-            <input type="number" id="txt-people" class="field" placeholder="CANTIDAD DE PERSONAS" min="1" max="5">
-          </div>
-          <div>
-            <label class="icon"><i class="far fa-calendar-check"></i></label>
-            <input type="date" id="date-start" class="field">
-            <label class="icon"><i class="far fa-calendar-check"></i></label>
-            <input type="date" id="date-end" class="field">
-          </div>
-          <button id="btn-confirm" class="btn-primary">Aceptar</button>
-        </form>
       </article>
     </section>
   </main>

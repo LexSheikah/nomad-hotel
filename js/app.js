@@ -9,8 +9,7 @@ const roomsSection = document.querySelector('#rooms'),
       btnMinus = document.querySelector('#spinner-minus'),
       txtNights = document.querySelector('#spinner-input'),
       slcRooms = document.querySelector('#room-list'),
-      modalBackground = document.querySelector('#modal-background'),
-      modalReservation = document.querySelector('#modal-reservations'),
+      modalReservation = document.querySelector('#modal-reservation'),
       btnHome = document.querySelector('#btn-home'),
       btnReservations = document.querySelector('#btn-reservations'),
       sectionHome = document.querySelector('#section-home'),
@@ -93,14 +92,10 @@ const renderRoom = (id) => {
     }
   })
 
-  addModal()
+  addModal();
 
   // Habilitando el Spinner de Número de noches
-  if(id === 'all'){
-    if(!divSpinner.classList.contains('hidden')) divSpinner.classList.add('hidden')
-  } else {
-    if(divSpinner.classList.contains('hidden')) divSpinner.classList.remove('hidden')
-  }
+  (id === 'all') ? divSpinner.classList.add('hidden') : divSpinner.classList.add('flex')
 }
 
 const renderRooms = () => {
@@ -160,7 +155,6 @@ const showModal = ( id ) => {
   document.querySelector('#box-img').setAttribute('src', hab.image)
   document.querySelector('#box-price').innerText = `$${hab.price * nights}`
   document.querySelector('#box-name').innerText = `Habitación  ${hab.name} por ${nights} noche(s)`
-  modalBackground.classList.remove('hidden')
   modalReservation.classList.remove('hidden')
 
   // Seteando fechas para la reservación
@@ -254,7 +248,6 @@ const makeReservation = () => {
 }
 
 const hideModal = () => {
-  modalBackground.classList.add('hidden')
   modalReservation.classList.add('hidden')
   cleanForm()
 }

@@ -10,6 +10,7 @@
   --dark-gray: #393e46;
   --normal-gray: #888888;
   --light-gray: #eeeeee;
+  --modal-bg: rgba(57,62,70, 0.9);
 }
 
 /* Inicializando etiquetas */
@@ -76,14 +77,6 @@ main {
   border-radius: 5px;
   outline: none;
   cursor: pointer;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.active {
-  color: var(--dark-purple) !important;
 }
 
 #spinner-number {
@@ -200,39 +193,32 @@ footer {
   box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
 }
 
-#modal-background {
-  width: 100%;
-  height: 100vh;
-  background-color: var(--black);
-  opacity: 0.7;
-  position: absolute;
+.modal {
+  position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
-  z-index: 100;
-}
-
-.modal {
   width: 100%;
   height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 150;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#modalBox {
-  width: 90vw;
-  height: 80vh;
-  border-radius: 5px;
   overflow: hidden;
-  background-color: var(--white);
+  background: var(--modal-bg);
+  backdrop-filter: blur(5px);
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#box-resumen {
+.modal-box {
+  width: 1200px;
+  height: 500px;
+  border-radius: 10px;
+  background-color: var(--white);
+  overflow: hidden;
+  display: flex;
+  position: absolute;
+}
+
+#box-summary {
   width: 40%;
   height: 100%;
   display: flex;
@@ -322,4 +308,12 @@ footer {
 #not-found {
   margin: 5px;
   padding: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+.active {
+  color: var(--dark-purple);
 }
