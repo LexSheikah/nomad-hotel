@@ -359,14 +359,13 @@ footer h3 {
 }
 
 #form-title, #form-error {
-  padding: 25px;
+  padding: 15px;
 }
 
 .field {
   margin: 4px;
   width: 248px;
   height: 48px;
-  border: 2px solid transparent;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -382,8 +381,10 @@ footer h3 {
 .field-input {
   width: 200px;
   padding: 0 8px;
+  color: var(--gray-dark);
   background-color: var(--gray-light);
-  border: none;
+  border: 2px solid transparent;
+  border-radius: 0 8px 8px 0;
   outline: none;
 }
 

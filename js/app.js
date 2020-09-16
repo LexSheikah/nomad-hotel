@@ -23,7 +23,9 @@ const txtName = document.querySelector('#txt-name'),
       txtPhone = document.querySelector('#txt-phone'),
       txtPeople = document.querySelector('#txt-people'),
       dateStart = document.querySelector('#date-start'),
-      dateEnd = document.querySelector('#date-end')
+      dateEnd = document.querySelector('#date-end'),
+      formError = document.querySelector('#form-error')
+
 
 let nights = 1,
     RESERVATIONS = [],
@@ -151,7 +153,7 @@ const searchPersonById = ( dui ) => {
 const showModal = ( id ) => {
   let date = new Date();
   hab = searchRoomById(id)
-  console.log(hab)
+
   document.querySelector('#room-img').setAttribute('src', hab.image)
   document.querySelector('#room-name').innerText = hab.name
   document.querySelector('#room-description').innerText = `${hab.description}`
@@ -168,7 +170,7 @@ const showModal = ( id ) => {
 }
 
 // Validar formulario
-let formFields = document.querySelectorAll('.field')
+let formFields = document.querySelectorAll('.field-input')
 formFields.forEach( campo => campo.oninput = () => activeColor(campo))
 
 const validateReservationDate = () => {
@@ -180,17 +182,16 @@ const validateReservationDate = () => {
 
   if(Date.now() <= dStart && dEnd > dStart) {
     nights = (dEnd.getTime() - dStart.getTime()) / 86400000
-    // document.querySelector('#box-img').setAttribute('src', hab.image)
-    // document.querySelector('#box-price').innerText = `$${hab.price * nights}`
-    // document.querySelector('#box-name').innerText = `Habitación  ${hab.name} por ${nights} noche(s)`
+    document.querySelector('#room-stay').innerText = `${nights} noche(s)`
+    document.querySelector('#room-pay').innerText = `$${hab.price * nights}`
+    formError.innerText = ``
     dateStart.style.setProperty("border-color","transparent")
     dateEnd.style.setProperty("border-color","transparent")
     return true
   } else {
-    document.querySelector('#form-error').innerText = `Verifique la fecha de reservación`
+    formError.innerText = `Verifique la fecha de reservación`
     dateStart.style.setProperty("border-color","#e8505b")
     dateEnd.style.setProperty("border-color","#e8505b")
-
     return false
   }
 }
@@ -206,6 +207,8 @@ const cleanForm = () => {
   txtPeople.value = 0
   dateStart.value = date
   dateEnd.value = date.setDate(date.getDate() + nights)
+  formError.innerText = ``
+  formFields.forEach( field => { field.style.setProperty("border-color","transparent") })
 }
 
 const activeColor = (element) => {
@@ -228,9 +231,9 @@ document.querySelector('#btn-confirm').addEventListener('click', (e) => {
   e.preventDefault()
   let formComplete = true
 
-  formFields.forEach( campo => {
-    if(campo.value === "") {
-      activeColor(campo)
+  formFields.forEach( field => {
+    if(field.value === "") {
+      activeColor(field)
       formComplete = false
     }
   })
