@@ -52,19 +52,19 @@ const roomOptionTemplate = ( hab ) => {
 }
 
 const roomArticleTemplate = ( hab ) => {
-  return  `<article class="card">
+  return  `<article class="card shadow">
             <img src="${hab.image}" class="card-img" alt="${hab.name}">
-            <div class="card-text">
-              <div class="card-text-header">
-                <h2>${hab.name}</h2>
+            <div class="p24">
+              <div class="card-header row">
+                <h2 class="text2">${hab.name}</h2>
                 <h3>$${hab.price} por noche</h3>
                 <h3>${hab.available} habitaciones disponibles</h3>
               </div>
-              <p class="card-text-body">${hab.description}</p>
+              <p class="card-body">${hab.description}</p>
             </div>
             <div class="card-price">
-              <h2>$${hab.price * nights}</h2>
-              <h5>por ${nights} noche(s)</h5>
+              <h2 class="text1 active">$${hab.price * nights}</h2>
+              <h4 class="text3">por ${nights} noche(s)</h4>
               <button class="btn-reserve btn-primary" value="${hab.id}"> Reservar </button>
             </div>
           </article>`
@@ -95,13 +95,13 @@ const renderRoom = (id) => {
   addModal();
 
   // Habilitando el Spinner de Número de noches
-  (id === 'all') ? divSpinner.classList.add('hidden') : divSpinner.classList.add('flex')
+  (id === 'all') ? divSpinner.classList.add('hidden') : divSpinner.classList.remove('hidden')
 }
 
 const renderRooms = () => {
   reservationsSection.innerHTML = ''
   RESERVATIONS.forEach( r => {
-    const reservation = reservationArticleTemplate(r, searchPerson(r.dui), searchRoom(r.idRoom))
+    const reservation = reservationArticleTemplate(r, searchPersonById(r.dui), searchRoomById(r.idRoom))
     reservationsSection.insertAdjacentHTML('beforeend', reservation)
   })
 
@@ -137,12 +137,12 @@ btnMinus.addEventListener('click', () => {
   }
 })
 
-const searchRoom = ( id ) => {
+const searchRoomById = ( id ) => {
   let room = ROOMS.filter( r => r.id === id)
   return room[0]
 }
 
-const searchPerson = ( dui ) => {
+const searchPersonById = ( dui ) => {
   let person = PEOPLE.filter( p => p.dui === dui)
   return person[0]
 }
@@ -150,11 +150,15 @@ const searchPerson = ( dui ) => {
 // Manejo del modal para reservar habitación
 const showModal = ( id ) => {
   let date = new Date();
-  hab = searchRoom(id)
+  hab = searchRoomById(id)
+  console.log(hab)
+  document.querySelector('#room-img').setAttribute('src', hab.image)
+  document.querySelector('#room-name').innerText = hab.name
+  document.querySelector('#room-description').innerText = `${hab.description}`
+  document.querySelector('#room-price').innerText = `$${hab.price}`
+  document.querySelector('#room-stay').innerText = `${nights} noche(s)`
+  document.querySelector('#room-pay').innerText = `$${hab.price * nights}`
 
-  document.querySelector('#box-img').setAttribute('src', hab.image)
-  document.querySelector('#box-price').innerText = `$${hab.price * nights}`
-  document.querySelector('#box-name').innerText = `Habitación  ${hab.name} por ${nights} noche(s)`
   modalReservation.classList.remove('hidden')
 
   // Seteando fechas para la reservación
@@ -176,16 +180,14 @@ const validateReservationDate = () => {
 
   if(Date.now() <= dStart && dEnd > dStart) {
     nights = (dEnd.getTime() - dStart.getTime()) / 86400000
-    document.querySelector('#box-img').setAttribute('src', hab.image)
-    document.querySelector('#box-price').innerText = `$${hab.price * nights}`
-    document.querySelector('#box-name').innerText = `Habitación  ${hab.name} por ${nights} noche(s)`
+    // document.querySelector('#box-img').setAttribute('src', hab.image)
+    // document.querySelector('#box-price').innerText = `$${hab.price * nights}`
+    // document.querySelector('#box-name').innerText = `Habitación  ${hab.name} por ${nights} noche(s)`
     dateStart.style.setProperty("border-color","transparent")
     dateEnd.style.setProperty("border-color","transparent")
-
     return true
   } else {
-    document.querySelector('#box-price').innerText = 'Fecha invalida'
-    document.querySelector('#box-name').innerText = `Verifique la fecha de reservación`
+    document.querySelector('#form-error').innerText = `Verifique la fecha de reservación`
     dateStart.style.setProperty("border-color","#e8505b")
     dateEnd.style.setProperty("border-color","#e8505b")
 
@@ -264,16 +266,16 @@ const addModal = () => {
 
 // Manejando la barra de navegación
 btnHome.addEventListener('click', () => {
-  btnHome.classList.add('active')
-  btnReservations.classList.remove('active')
+  btnHome.classList.add('active-border')
+  btnReservations.classList.remove('active-border')
   sectionHome.classList.remove('hidden')
   sectionReservations.classList.add('hidden')
 
 })
 
 btnReservations.addEventListener('click', () => {
-  btnReservations.classList.add('active')
-  btnHome.classList.remove('active')
+  btnReservations.classList.add('active-border')
+  btnHome.classList.remove('active-border')
   sectionReservations.classList.remove('hidden')
   sectionHome.classList.add('hidden')
 

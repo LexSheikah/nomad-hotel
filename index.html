@@ -10,24 +10,24 @@
 <body>
   <header>
     <nav>
-      <div id="brand">Nomad Hotel</div>
-      <ul id="menu">
-        <li><a href="#" id="btn-home" class="menu-items active">Habitaciones</a></li>
-        <li><a href="#" id="btn-reservations" class="menu-items">Reservaciones</a></li>
+      <div class="text1 active">Nomad Hotel</div>
+      <ul id="menu" class="text3">
+        <li><a href="#" id="btn-home" class="menu-item active-border">Habitaciones</a></li>
+        <li><a href="#" id="btn-reservations" class="menu-item">Reservaciones</a></li>
       </ul>
     </nav>
   </header>
 
-  <main>
+  <main class="p24">
 
     <section id="section-home">
-      <div id="search-options">
-        <label class="lbl-options">Seleccione una habitación:</label>
+      <div class="row">
+        <label class="text3 m8">Seleccione una habitación:</label>
         <select id="room-list">
           <option value="all">Todas las habitaciones</option>
         </select>
-        <div id="spinner-number">
-          <label class="lbl-options">Número de noches: </label>
+        <div id="spinner-number" class="row">
+          <label class="text3 m8">Número de noches: </label>
           <button id="spinner-minus" class="btn-primary">- </button>
           <input id="spinner-input" type="text" disabled/>
           <button id="spinner-plus" class="btn-primary">+ </button>
@@ -44,51 +44,73 @@
 
     <!-- modales  -->
     <section>
-      <article id="modal-reservation" class="modal hidden">
+      <article id="modal-reservation" class="modal row-center hidden">
         <div class="modal-box">
-          <div id="box-summary">
-            <img id="box-img"/>
-            <div id="box-ticket">
-              <h2 id="box-price">$400</h2>
-              <h4 id="box-name">Habitación por x noches</h2>
+          <div id="room-summary">
+            <img id="room-img"/>
+            <div id="room-ticket" class="p24">
+              <h3><span class="text3 active">Habitación: </span><span id="room-name" class="text4"></span></h3>
+              <h3><span class="text3 active">Descripción: </span><span id="room-description" class="text4"></span></h3>
+              <h3><span class="text3 active">Precio: </span><span id="room-price" class="text4"></span></h3>
+              <h3><span class="text3 active">Estadía: </span><span id="room-stay" class="text4"></span></h3>
+              <h3><span class="text3 active">Total: </span><span id="room-pay" class="text4"></span></h3>
             </div>
           </div>
-          <form id="box-form">
+          <div id="reservation-form">
             <button id="btn-close"><i class="fas fa-times"></i></button>
-            <label id="form-title">Información de la reservación</label>
-            <div>
-              <label class="icon"><i class="fas fa-user"></i></label>
-              <input type="text" id="txt-name" class="field" placeholder="NOMBRE">
-              <label class="icon"><i class="fas fa-user"></i></label>
-              <input type="text" id="txt-lastname" class="field" placeholder="APELLIDO">
-            </div>
-            <div>
-              <label class="icon"><i class="fas fa-address-card"></i></label>
-              <input type="text" id="txt-dui" class="field" placeholder="DUI">
-              <label class="icon"><i class="fas fa-phone-alt"></i></label>
-              <input type="text" id="txt-phone" class="field" placeholder="TELEFONO">
-            </div>
-            <div>
-              <label class="icon"><i class="fas fa-envelope"></i></label>
-              <input type="email" id="txt-email" class="field" placeholder="EMAIL">
-              <label class="icon"><i class="fas fa-user-plus"></i></label>
-              <input type="number" id="txt-people" class="field" placeholder="CANTIDAD DE PERSONAS" min="1" max="5">
-            </div>
-            <div>
-              <label class="icon"><i class="far fa-calendar-check"></i></label>
-              <input type="date" id="date-start" class="field">
-              <label class="icon"><i class="far fa-calendar-check"></i></label>
-              <input type="date" id="date-end" class="field">
-            </div>
-            <button id="btn-confirm" class="btn-primary">Aceptar</button>
-          </form>
+            <label id="form-title" class="text2">Formulario de reservación</label>
+            <form>
+              <div class="row">
+                <div class="field row">
+                  <div class="icon row-center"><i class="fas fa-user"></i></div>
+                  <input type="text" id="txt-name" class="field-input" placeholder="NOMBRE">
+                </div>
+                <div class="field row">
+                  <div class="icon row-center"><i class="fas fa-user"></i></div>
+                  <input type="text" id="txt-lastname" class="field-input" placeholder="APELLIDO">
+                </div>
+              </div>
+              <div class="row">
+                <div class="field row">
+                  <div class="icon row-center"><i class="fas fa-address-card"></i></div>
+                  <input type="text" id="txt-dui" class="field-input" placeholder="DUI">
+                </div>
+                <div class="field row">
+                  <div class="icon row-center"><i class="fas fa-phone-alt"></i></div>
+                  <input type="text" id="txt-phone" class="field-input" placeholder="TELEFONO">
+                </div>
+              </div>
+              <div class="row">
+                <div class="field row">
+                  <div class="icon row-center"><i class="fas fa-envelope"></i></div>
+                  <input type="email" id="txt-email" class="field-input" placeholder="EMAIL">
+                </div>
+                <div class="field row">
+                  <div class="icon row-center"><i class="fas fa-user-plus"></i></div>
+                  <input type="number" id="txt-people" class="field-input" placeholder="CANTIDAD DE PERSONAS" min="1" max="5">
+                </div>
+              </div>
+              <div class="row">
+                <div class="field row">
+                  <div class="icon row-center"><i class="fas fa-calendar-check"></i></div>
+                  <input type="date" id="date-start" class="field-input">
+                </div>
+                <div class="field row">
+                  <div class="icon row-center"><i class="fas fa-calendar-check"></i></div>
+                  <input type="date" id="date-end" class="field-input">
+                </div>
+              </div>
+              <button id="btn-confirm" class="btn-primary">Aceptar</button>
+            </form>
+            <label id="form-error" class="text3 color-error"></label>
+          </div>
         </div>
       </article>
     </section>
   </main>
 
   <footer>
-    <h3>Kodigo &copy; Lex Sheikah</h3>
+    <h3 class="row-center text3">Kodigo &copy; Lex Sheikah</h3>
   </footer>
 
   <script src="./js/app.js" type="module"></script>
