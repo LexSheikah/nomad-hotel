@@ -7,7 +7,7 @@ const roomsSection = document.querySelector('#rooms'),
       divSpinner = document.querySelector('#spinner-number'),
       btnPlus = document.querySelector('#spinner-plus'),
       btnMinus = document.querySelector('#spinner-minus'),
-      txtNights = document.querySelector('#spinner-input'),
+      spinnerNights = document.querySelector('#spinner-input'),
       slcRooms = document.querySelector('#room-list'),
       modalReservation = document.querySelector('#modal-reservation'),
       btnHome = document.querySelector('#btn-home'),
@@ -19,8 +19,10 @@ const roomsSection = document.querySelector('#rooms'),
 const txtName = document.querySelector('#txt-name'),
       txtLastName = document.querySelector('#txt-lastname'),
       txtDui = document.querySelector('#txt-dui'),
+      txtCreditCard = document.querySelector('#txt-credit-card'),
       txtEmail = document.querySelector('#txt-email'),
       txtPhone = document.querySelector('#txt-phone'),
+      txtNights = document.querySelector('#txt-nights'),
       txtPeople = document.querySelector('#txt-people'),
       dateStart = document.querySelector('#date-start'),
       dateEnd = document.querySelector('#date-end'),
@@ -149,7 +151,7 @@ slcRooms.addEventListener('change', () => {
 const updateNights = (n) => {
   const id = slcRooms.options[slcRooms.selectedIndex].value
   nights = nights + n
-  txtNights.value = nights
+  spinnerNights.value = nights
   renderRoom(id)
 }
 
@@ -182,28 +184,52 @@ const showModal = ( id ) => {
 
   modalReservation.classList.remove('hidden')
 
-  // Seteando fechas para la reservación
-  dateStart.value = date.toISOString().substr(0, 10);
-  date.setDate(date.getDate() + nights);
-  dateEnd.value = date.toISOString().substr(0, 10);
+  // Seteando valores por defecto para la reservación
+  txtNights.value = nights
+  dateStart.value = date.toISOString().substr(0, 10)
+  date.setDate(date.getDate() + nights)
+  dateEnd.value = date.toISOString().substr(0, 10)
 }
 
 // Validar formulario
 let formFields = document.querySelectorAll('.field-input')
 formFields.forEach( campo => campo.oninput = () => activeColor(campo))
 
-const validateReservationDate = () => {
-  let dStart = new Date(dateStart.value),
-      dEnd = new Date(dateEnd.value)
+const validateReservationPeople = () => {
+  if(txtPeople.value > 0 && txtPeople.value <= 5)  {
+    txtPeople.style.setProperty("border-color","transparent")
+    formError.innerText = ``
+  } else {
+    txtPeople.style.setProperty("border-color","#e8505b")
+    formError.innerText = `Verifique la cantidad de personas`
+  }
+}
 
-      dStart.setDate(dStart.getDate() + 1)
-      dEnd.setDate(dEnd.getDate() + 1)
-
-  if(Date.now() <= dStart && dEnd > dStart) {
-    nights = (dEnd.getTime() - dStart.getTime()) / 86400000
+const validateReservationStay = () => {
+  if(txtNights.value > 0) {
+    nights = parseInt(txtNights.value)
+    let dStart = new Date(dateStart.value)
+    let dEnd = new Date(dateEnd.value)
+    dStart.setDate(dStart.getDate())
+    dEnd.setDate(dStart.getDate() + nights)
+    dateEnd.value = dEnd.toISOString().substr(0, 10)
     document.querySelector('#room-stay').innerText = `${nights} noche(s)`
     document.querySelector('#room-pay').innerText = `$${hab.price * nights}`
+    txtNights.style.setProperty("border-color","transparent")
     formError.innerText = ``
+    spinnerNights.value = nights
+  } else {
+    txtNights.style.setProperty("border-color","#e8505b")
+    formError.innerText = `Verifique la cantidad de noches`
+  }
+}
+
+const validateReservationDate = () => {
+  let dStart = new Date(dateStart.value)
+  dStart.setDate(dStart.getDate() + 1)
+
+  if(Date.now() <= dStart) {
+    validateReservationStay()
     dateStart.style.setProperty("border-color","transparent")
     dateEnd.style.setProperty("border-color","transparent")
     return true
@@ -238,8 +264,10 @@ const activeColor = (element) => {
   }
 }
 
+txtPeople.oninput = () => validateReservationPeople()
+txtNights.oninput = () => validateReservationStay()
+txtNights.addEventListener('change', validateReservationStay)
 dateStart.addEventListener('change', validateReservationDate)
-dateEnd.addEventListener('change', validateReservationDate)
 
 document.querySelector("#btn-close").addEventListener('click', (e) => {
   e.preventDefault();
@@ -305,7 +333,8 @@ btnReservations.addEventListener('click', () => {
 })
 
 //Inicializando ...
-txtNights.value = nights
-txtNights.setAttribute('disabled',true)
+spinnerNights.value = nights
+spinnerNights.setAttribute('disabled',true)
+dateEnd.setAttribute('disabled',true)
 renderOptions()
 renderRoom('all')
