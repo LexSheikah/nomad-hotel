@@ -26,62 +26,86 @@ const txtName = document.querySelector('#txt-name'),
       dateEnd = document.querySelector('#date-end'),
       formError = document.querySelector('#form-error')
 
-
 let nights = 1,
-    RESERVATIONS = [],
-    PEOPLE = [],
     hab = null
 
-//#region DATOS DE PRUEBA
-const person1 = new Person('12345678-9','Lex Marvin','Ortiz Canizález','lex.ortizc@gmail.com','7477-4734')
-const reservation1 = new Reservation('r01',3,'2020-08-30','2020-09-01','12345678-9','hab3')
-// PEOPLE.push(person1)
-// RESERVATIONS.push(reserva1)
-// RESERVATIONS.push(reserva1)
-//#endregion
+const setRoomList = (roomList) => {
+  localStorage.setItem('localRoomList', JSON.stringify(roomList))
+}
 
-const ROOMS = [
-  new Room('hab1', 'Normal', 100, 10, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2016/08/07/00/44/bed-1575491_960_720.jpg'),
-  new Room('hab2', 'Elegante', 230, 5, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2014/08/11/21/40/bedroom-416063_960_720.jpg'),
-  new Room('hab3', 'Lujosa', 300, 2, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2018/10/28/12/37/bedroom-3778695_960_720.jpg')
-]
+const setReservationList = (reservationList) => {
+  localStorage.setItem('localReservationList', JSON.stringify(reservationList))
+}
 
-const roomOptionTemplate = ( hab ) => {
+const getRoomList = () => {
+  let roomList = []
+  const localRoomList = localStorage.getItem('localRoomList')
+  if(localRoomList !== null) {
+    roomList = JSON.parse(localRoomList)
+  } else {
+    roomList = [
+      new Room('hab1', 'Normal', 100, 10, 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2016/08/07/00/44/bed-1575491_960_720.jpg'),
+      new Room('hab2', 'Elegante', 230, 5, 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2014/08/11/21/40/bedroom-416063_960_720.jpg'),
+      new Room('hab3', 'Lujosa', 300, 2, 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2018/10/28/12/37/bedroom-3778695_960_720.jpg')
+    ]
+    setRoomList(roomList)
+  }
+  return roomList
+}
+
+const getReservationList = () => {
+  let reservationList = []
+  const localReservationList = localStorage.getItem('localReservationList')
+  if(localReservationList !== null) {
+    reservationList = JSON.parse(localReservationList)
+  } else {
+    setReservationList(reservationList)
+  }
+  return reservationList
+}
+
+let ROOMS = getRoomList()
+let RESERVATIONS = getReservationList()
+console.log(ROOMS)
+console.log(RESERVATIONS)
+
+
+const roomOptionTemplate = ( room ) => {
   const selectItem = document.createElement('option')
-  selectItem.setAttribute('value', hab.id)
-  selectItem.insertAdjacentText('beforeend', hab.name)
+  selectItem.setAttribute('value', room.id)
+  selectItem.insertAdjacentText('beforeend', room.name)
   slcRooms.insertAdjacentElement('beforeend', selectItem)
 }
 
-const roomArticleTemplate = ( hab ) => {
+const roomArticleTemplate = ( room ) => {
   return  `<article class="card shadow">
-            <img src="${hab.image}" class="card-img" alt="${hab.name}">
+            <img src="${room.image}" class="card-img" alt="${room.name}">
             <div class="p24">
               <div class="card-header row">
-                <h2 class="text2">${hab.name}</h2>
-                <h3>$${hab.price} por noche</h3>
-                <h3>${hab.available} habitaciones disponibles</h3>
+                <h2 class="text2">${room.name}</h2>
+                <h3>$${room.price} por noche</h3>
+                <h3>${room.available} roomitaciones disponibles</h3>
               </div>
-              <p class="card-body">${hab.description}</p>
+              <p class="card-body">${room.description}</p>
             </div>
             <div class="card-price">
-              <h2 class="text1 active">$${hab.price * nights}</h2>
+              <h2 class="text1 active">$${room.price * nights}</h2>
               <h4 class="text3">por ${nights} noche(s)</h4>
-              <button class="btn-reserve btn-primary" value="${hab.id}"> Reservar </button>
+              <button class="btn-reserve btn-primary" value="${room.id}"> Reservar </button>
             </div>
           </article>`
 }
 
-const reservationArticleTemplate = ( reserva, persona, habitacion) => {
+const reservationArticleTemplate = ( reservation ) => {
   return  `<article class="card-reservation card">
-            <label><span class="active">Nombre responsable: </span> ${persona.name} ${persona.lastName}</label>
-            <label><span class="active">DUI: </span> ${persona.dui}</label>
-            <label><span class="active">Email: </span> ${persona.email}</label>
-            <label><span class="active">Teléfono: </span> ${persona.phone}</label>
-            <label><span class="active">Habitacion: </span> ${habitacion.name}</label>
-            <label><span class="active">Cantidad de personas: </span> ${reserva.people}</label>
-            <label><span class="active">Fecha inicial: </span> ${reserva.dateStart}</label>
-            <label><span class="active">Fecha final: </span> ${reserva.dateEnd}</label>
+            <label><span class="active">Nombre responsable: </span> ${reservation.person.name} ${reservation.person.lastName}</label>
+            <label><span class="active">DUI: </span> ${reservation.person.dui}</label>
+            <label><span class="active">Email: </span> ${reservation.person.email}</label>
+            <label><span class="active">Teléfono: </span> ${reservation.person.phone}</label>
+            <label><span class="active">Habitacion: </span> ${reservation.room.name}</label>
+            <label><span class="active">Cantidad de personas: </span> ${reservation.people}</label>
+            <label><span class="active">Fecha inicial: </span> ${reservation.dateStart}</label>
+            <label><span class="active">Fecha final: </span> ${reservation.dateEnd}</label>
           </article>`
 }
 
@@ -103,7 +127,7 @@ const renderRoom = (id) => {
 const renderRooms = () => {
   reservationsSection.innerHTML = ''
   RESERVATIONS.forEach( r => {
-    const reservation = reservationArticleTemplate(r, searchPersonById(r.dui), searchRoomById(r.idRoom))
+    const reservation = reservationArticleTemplate(r)
     reservationsSection.insertAdjacentHTML('beforeend', reservation)
   })
 
@@ -111,8 +135,8 @@ const renderRooms = () => {
 
 }
 const renderOptions = () => {
-  ROOMS.forEach( hab => {
-    roomOptionTemplate( hab )
+  ROOMS.forEach( room => {
+    roomOptionTemplate( room )
   })
 }
 
@@ -142,11 +166,6 @@ btnMinus.addEventListener('click', () => {
 const searchRoomById = ( id ) => {
   let room = ROOMS.filter( r => r.id === id)
   return room[0]
-}
-
-const searchPersonById = ( dui ) => {
-  let person = PEOPLE.filter( p => p.dui === dui)
-  return person[0]
 }
 
 // Manejo del modal para reservar habitación
@@ -246,9 +265,9 @@ document.querySelector('#btn-confirm').addEventListener('click', (e) => {
 
 const makeReservation = () => {
   const p = new Person(txtDui.value, txtName.value, txtLastName.value, txtEmail.value, txtPhone.value)
-  const r = new Reservation(txtDui.value + dateStart.value, txtPeople.value, dateStart.value, dateEnd.value, txtDui.value, hab.id)
-  PEOPLE.push(p)
+  const r = new Reservation(txtDui.value + dateStart.value, txtPeople.value, dateStart.value, dateEnd.value, p, hab)
   RESERVATIONS.push(r)
+  setReservationList(RESERVATIONS)
   cleanForm()
 }
 

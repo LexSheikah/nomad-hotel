@@ -1,10 +1,10 @@
 export default class Reservation {
-  constructor(id, people, dateStart, dateEnd, dui, idRoom) {
+  constructor(id, people, dateStart, dateEnd, person, room) {
     this.id = id
     this.people = people
     this.dateStart = dateStart
     this.dateEnd = dateEnd
-    this.dui = dui
-    this.idRoom = idRoom
+    this.person = person
+    this.room = room
   }
 }
