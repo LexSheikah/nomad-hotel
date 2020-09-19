@@ -46,9 +46,9 @@ const getRoomList = () => {
     roomList = JSON.parse(localRoomList)
   } else {
     roomList = [
-      new Room('hab1', 'Normal', 100, 10, 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2016/08/07/00/44/bed-1575491_960_720.jpg'),
-      new Room('hab2', 'Elegante', 230, 5, 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2014/08/11/21/40/bedroom-416063_960_720.jpg'),
-      new Room('hab3', 'Lujosa', 300, 2, 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2018/10/28/12/37/bedroom-3778695_960_720.jpg')
+      new Room('hab1', 'Normal', 100, 50, 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2016/08/07/00/44/bed-1575491_960_720.jpg'),
+      new Room('hab2', 'Elegante', 230, 30, 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2014/08/11/21/40/bedroom-416063_960_720.jpg'),
+      new Room('hab3', 'Lujosa', 300, 20, 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'https://cdn.pixabay.com/photo/2018/10/28/12/37/bedroom-3778695_960_720.jpg')
     ]
     setRoomList(roomList)
   }
@@ -86,7 +86,7 @@ const roomArticleTemplate = ( room ) => {
               <div class="card-header row">
                 <h2 class="text2">${room.name}</h2>
                 <h3>$${room.price} por noche</h3>
-                <h3>${room.available} roomitaciones disponibles</h3>
+                <h3>${room.available} habitaciones disponibles</h3>
               </div>
               <p class="card-body">${room.description}</p>
             </div>
@@ -99,16 +99,19 @@ const roomArticleTemplate = ( room ) => {
 }
 
 const reservationArticleTemplate = ( reservation ) => {
-  return  `<article class="card-reservation card">
-            <label><span class="active">Nombre responsable: </span> ${reservation.person.name} ${reservation.person.lastName}</label>
-            <label><span class="active">DUI: </span> ${reservation.person.dui}</label>
-            <label><span class="active">Email: </span> ${reservation.person.email}</label>
-            <label><span class="active">Teléfono: </span> ${reservation.person.phone}</label>
-            <label><span class="active">Habitacion: </span> ${reservation.room.name}</label>
-            <label><span class="active">Cantidad de personas: </span> ${reservation.people}</label>
-            <label><span class="active">Fecha inicial: </span> ${reservation.dateStart}</label>
-            <label><span class="active">Fecha final: </span> ${reservation.dateEnd}</label>
-          </article>`
+  return  `<tr>
+            <td class="cell">${reservation.id}</td>
+            <td class="cell">${reservation.person.name} ${reservation.person.lastName}</td>
+            <td class="cell">${reservation.person.dui}</td>
+            <td class="cell">${reservation.person.creditCard}</td>
+            <td class="cell">${reservation.person.email}</td>
+            <td class="cell">${reservation.person.phone}</td>
+            <td class="cell">${reservation.room.name}</td>
+            <td class="cell">${reservation.people}</td>
+            <td class="cell">${reservation.dateStart}</td>
+            <td class="cell">${reservation.dateEnd}</td>
+            <td class="cell">${reservation.pay}</td>
+          </tr>`
 }
 
 const renderRoom = (id) => {
@@ -126,15 +129,13 @@ const renderRoom = (id) => {
   (id === 'all') ? divSpinner.classList.add('hidden') : divSpinner.classList.remove('hidden')
 }
 
-const renderRooms = () => {
-  reservationsSection.innerHTML = ''
+const renderReservations = () => {
+  const headers = '<th>ID</th><th>Responsable</th><th>DUI</th><th>Tarjeta</th><th>Email</th><th>Teléfono</th><th>Habitación</th><th>Personas</th><th>Fecha inicial</th><th>Fecha final</th><th>Total</th>'
+  reservationsSection.innerHTML = `<table id='tbl-reservations'><tr id="tbl-headers">${headers}</tr></table>`
   RESERVATIONS.forEach( r => {
     const reservation = reservationArticleTemplate(r)
-    reservationsSection.insertAdjacentHTML('beforeend', reservation)
+    document.querySelector('#tbl-reservations').insertAdjacentHTML('beforeend', reservation)
   })
-
-  if(RESERVATIONS.length == 0) reservationsSection.insertAdjacentHTML('beforeend', '<h4 id="not-found">Aún no existen reservaciones</h4>')
-
 }
 const renderOptions = () => {
   ROOMS.forEach( room => {
@@ -247,9 +248,10 @@ const cleanForm = () => {
   txtDui.value = ''
   txtName.value = ''
   txtLastName.value = ''
+  txtCreditCard.value = ''
   txtEmail.value = ''
   txtPhone.value = ''
-  txtPeople.value = 0
+  txtPeople.value = ''
   dateStart.value = date
   dateEnd.value = date.setDate(date.getDate() + nights)
   formError.innerText = ``
@@ -291,16 +293,28 @@ document.querySelector('#btn-confirm').addEventListener('click', (e) => {
   }
 })
 
+const updateRoomsAvailable = () => {
+  for (const key in ROOMS) {
+    if (ROOMS[key].id == hab.id) {
+      ROOMS[key].available--
+      setRoomList(ROOMS)
+    }
+  }
+}
+
 const makeReservation = () => {
-  const p = new Person(txtDui.value, txtName.value, txtLastName.value, txtEmail.value, txtPhone.value)
-  const r = new Reservation(txtDui.value + dateStart.value, txtPeople.value, dateStart.value, dateEnd.value, p, hab)
+  const p = new Person(txtDui.value, txtName.value, txtLastName.value, txtCreditCard.value, txtEmail.value, txtPhone.value)
+  const r = new Reservation(txtDui.value + dateStart.value, txtPeople.value, dateStart.value, dateEnd.value, hab.price * nights, p, hab)
   RESERVATIONS.push(r)
   setReservationList(RESERVATIONS)
-  cleanForm()
+  updateRoomsAvailable()
+  goToSection('reservations')
 }
 
 const hideModal = () => {
   modalReservation.classList.add('hidden')
+  nights = 1
+  spinnerNights.value = nights
   cleanForm()
 }
 
@@ -315,22 +329,27 @@ const addModal = () => {
 }
 
 // Manejando la barra de navegación
-btnHome.addEventListener('click', () => {
-  btnHome.classList.add('active-border')
-  btnReservations.classList.remove('active-border')
-  sectionHome.classList.remove('hidden')
-  sectionReservations.classList.add('hidden')
+const goToSection = (section) => {
+  switch (section) {
+    case 'rooms':
+      btnHome.classList.add('active-border')
+      btnReservations.classList.remove('active-border')
+      sectionHome.classList.remove('hidden')
+      sectionReservations.classList.add('hidden')
+      renderRoom('all')
+      break;
+    case 'reservations':
+      btnReservations.classList.add('active-border')
+      btnHome.classList.remove('active-border')
+      sectionReservations.classList.remove('hidden')
+      sectionHome.classList.add('hidden')
+      renderReservations()
+      break;
+  }
+}
 
-})
-
-btnReservations.addEventListener('click', () => {
-  btnReservations.classList.add('active-border')
-  btnHome.classList.remove('active-border')
-  sectionReservations.classList.remove('hidden')
-  sectionHome.classList.add('hidden')
-
-  renderRooms()
-})
+btnHome.addEventListener('click', () => goToSection('rooms'))
+btnReservations.addEventListener('click', () => goToSection('reservations'))
 
 //Inicializando ...
 spinnerNights.value = nights

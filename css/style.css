@@ -251,11 +251,6 @@ nav {
   color: var(--white);
 }
 
-/* .card-reservation {
-  padding: 10px 15px;
-  flex-direction: column;
-} */
-
 .card  {
   margin: var(--size24) 0;
   border-left: var(--size8) solid var(--purple-dark);
@@ -408,9 +403,16 @@ footer h3 {
   color: var(--purple-light);
 }
 
-#not-found {
-  margin: 5px;
-  padding: 5px;
+#tbl-reservations {
+}
+
+#tbl-headers {
+  background-color: var(--purple-dark);
+  color: var(--white);
+}
+
+#tbl-headers th, .cell {
+  padding: 8px;
 }
 
 .hidden {
