@@ -114,9 +114,11 @@ const reservationArticleTemplate = ( reservation ) => {
 const renderRoom = (id) => {
   roomsSection.innerHTML = ''
   ROOMS.forEach( r => {
-    if( r.id === id || id === 'all') {
-      const room = roomArticleTemplate(r)
-      roomsSection.insertAdjacentHTML('beforeend', room)
+    if(r.available > 0) {
+      if( r.id === id || id === 'all') {
+        const room = roomArticleTemplate(r)
+        roomsSection.insertAdjacentHTML('beforeend', room)
+      }
     }
   })
 
@@ -136,7 +138,7 @@ const renderReservations = () => {
 }
 const renderOptions = () => {
   ROOMS.forEach( room => {
-    roomOptionTemplate( room )
+    if(room.available > 0) roomOptionTemplate( room )
   })
 }
 
