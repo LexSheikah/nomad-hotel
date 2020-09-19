@@ -68,9 +68,6 @@ const getReservationList = () => {
 
 let ROOMS = getRoomList()
 let RESERVATIONS = getReservationList()
-console.log(ROOMS)
-console.log(RESERVATIONS)
-
 
 const roomOptionTemplate = ( room ) => {
   const selectItem = document.createElement('option')
@@ -196,14 +193,29 @@ const showModal = ( id ) => {
 let formFields = document.querySelectorAll('.field-input')
 formFields.forEach( campo => campo.oninput = () => activeColor(campo))
 
-const validateReservationPeople = () => {
-  if(txtPeople.value > 0 && txtPeople.value <= 5)  {
-    txtPeople.style.setProperty("border-color","transparent")
-    formError.innerText = ``
-  } else {
-    txtPeople.style.setProperty("border-color","#e8505b")
-    formError.innerText = `Verifique la cantidad de personas`
+const validateCreditCard = () => {
+  let card = txtCreditCard.value
+  let naux = 0
+  card = card.replaceAll("-","")
+  card = card.split('').reverse();
+  for (const key in card) {
+    if (key % 2 === 1) {
+      card[key] = card[key] * 2
+      if(card[key] >= 10) {
+        card[key] = card[key].toString().split('')
+        card[key] = parseInt(card[key][0]) + parseInt(card[key][1])
+      }
+    }
+    naux += parseInt(card[key])
   }
+
+  if(naux % 10 === 0 && naux !== 0) activeColorMsg(txtCreditCard, null)
+  else activeColorMsg(txtCreditCard, 'Tarjeta invalida. Verifique su tarjeta')
+}
+
+const validateReservationPeople = () => {
+  if(txtPeople.value > 0 && txtPeople.value <= 5) activeColorMsg(txtPeople, null)
+  else activeColorMsg(txtPeople, 'Verifique la cantidad de personas')
 }
 
 const validateReservationStay = () => {
@@ -216,12 +228,10 @@ const validateReservationStay = () => {
     dateEnd.value = dEnd.toISOString().substr(0, 10)
     document.querySelector('#room-stay').innerText = `${nights} noche(s)`
     document.querySelector('#room-pay').innerText = `$${hab.price * nights}`
-    txtNights.style.setProperty("border-color","transparent")
-    formError.innerText = ``
+    activeColorMsg(txtNights, null)
     spinnerNights.value = nights
   } else {
-    txtNights.style.setProperty("border-color","#e8505b")
-    formError.innerText = `Verifique la cantidad de noches`
+    activeColorMsg(txtNights, 'Verifique la cantidad de noches')
   }
 }
 
@@ -231,13 +241,11 @@ const validateReservationDate = () => {
 
   if(Date.now() <= dStart) {
     validateReservationStay()
-    dateStart.style.setProperty("border-color","transparent")
-    dateEnd.style.setProperty("border-color","transparent")
+    activeColorMsg(dateStart, null)
+
     return true
   } else {
-    formError.innerText = `Verifique la fecha de reservación`
-    dateStart.style.setProperty("border-color","#e8505b")
-    dateEnd.style.setProperty("border-color","#e8505b")
+    activeColorMsg(dateStart, 'Verifique la fecha de reservación')
     return false
   }
 }
@@ -266,6 +274,17 @@ const activeColor = (element) => {
   }
 }
 
+const activeColorMsg = (element, msg) => {
+  if(!msg){
+    element.style.setProperty("border-color","transparent")
+    formError.innerText = ''
+  } else {
+    element.style.setProperty("border-color","#e8505b")
+    formError.innerText = msg
+  }
+}
+
+txtCreditCard.oninput = () => validateCreditCard()
 txtPeople.oninput = () => validateReservationPeople()
 txtNights.oninput = () => validateReservationStay()
 txtNights.addEventListener('change', validateReservationStay)
