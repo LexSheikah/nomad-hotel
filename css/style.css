@@ -265,8 +265,8 @@ nav {
 }
 
 .card-header h3 {
-  margin-left: 15px;
-  padding: 5px 15px;
+  margin-left: var(--size16);
+  padding: var(--size8) var(--size16);
   background-color: var(--purple-dark);
   color: var(--white);
   border-radius: 10px;
@@ -286,7 +286,7 @@ nav {
 }
 
 .btn-reserve {
-  margin: 25px 0;
+  margin: var(--size24) 0;
 }
 
 footer {
@@ -367,15 +367,15 @@ footer h3 {
 
 .icon {
   font-size: var(--size16);
-  width: 48px;
-  height: 48px;
+  width: var(--size48);
+  height: var(--size48);
   color: var(--white);
   background-color: var(--purple-dark);
 }
 
 .field-input {
   width: 200px;
-  padding: 0 8px;
+  padding: 0 var(--size8);
   color: var(--gray-dark);
   background-color: var(--gray-light);
   border: 2px solid transparent;
@@ -389,9 +389,9 @@ footer h3 {
 }
 
 #btn-close {
-  width: 50px;
-  height: 50px;
-  font-size: 24px;
+  width: var(--size48);
+  height: var(--size48);
+  font-size: var(--size24);
   color: var(--purple-dark);
   background-color: var(--white);
   border: none;
@@ -412,7 +412,7 @@ footer h3 {
 }
 
 #tbl-headers th, .cell {
-  padding: 8px;
+  padding: var(--size8);
 }
 
 .hidden {

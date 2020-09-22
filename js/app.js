@@ -98,7 +98,7 @@ const roomArticleTemplate = ( room ) => {
 const reservationArticleTemplate = ( reservation ) => {
   return  `<tr>
             <td class="cell">${reservation.id}</td>
-            <td class="cell">${reservation.person.name} ${reservation.person.lastName}</td>
+            <td class="cell">${reservation.person.firstName} ${reservation.person.lastName}</td>
             <td class="cell">${reservation.person.dui}</td>
             <td class="cell">${reservation.person.creditCard}</td>
             <td class="cell">${reservation.person.email}</td>
@@ -107,7 +107,7 @@ const reservationArticleTemplate = ( reservation ) => {
             <td class="cell">${reservation.people}</td>
             <td class="cell">${reservation.dateStart}</td>
             <td class="cell">${reservation.dateEnd}</td>
-            <td class="cell">${reservation.pay}</td>
+            <td class="cell">$${reservation.pay}</td>
           </tr>`
 }
 
